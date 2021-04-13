@@ -4,7 +4,7 @@ import cats.effect.IO
 import gratens.maxime.domain.api.Api
 import gratens.maxime.domain.config.ApiConfig
 import gratens.maxime.domain.model.{Actor, FullName}
-import gratens.maxime.domain.response.{FindActorMoviesResponse, PaginatedResponse}
+import gratens.maxime.domain.response.{FindActorMoviesResponse, FindMovieDirectorResponse, PaginatedResponse}
 import org.json4s.{DefaultFormats, Formats}
 
 import java.net.URLEncoder
@@ -32,7 +32,11 @@ class MooviedbApi(apiConfig: ApiConfig) extends Api[IO] {
     moviesResponse <- IO(parse(response.mkString).camelizeKeys.extract[FindActorMoviesResponse])
   } yield moviesResponse.cast.map(movie => (movie.id, movie.originalTitle)).toSet
 
-  override def findMovieDirector(id: Int): IO[(Int, String)] = ???
+  override def findMovieDirector(id: Int): IO[(Int, String)] = for {
+    response <- IO(Source.fromURL(buildUrl(s"/movie/$id/credits", None)))
+    movieResponse <- IO(parse(response.mkString).camelizeKeys.extract[FindMovieDirectorResponse])
+    director <- IO.fromOption(movieResponse.crew.find(_.job == "Director"))(new Throwable("Can't find any actor with this name"))
+  } yield (director.id, director.name)
 
   override def request(actor1: FullName, actor2: FullName): IO[Set[(String, String)]] = ???
 }

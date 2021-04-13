@@ -13,7 +13,8 @@ object Mooviedb extends IOApp {
     api = new MooviedbApi(config)
     _ <- (for {
       actorId <- api.findActorId("Jason", "Statham")
-      _ <- api.findActorMovies(actorId).map(println)
+      movies <- api.findActorMovies(actorId)
+      _ <- api.findMovieDirector(movies.head._1).map(println)
       _ <- api.findActorId("Chien", "Chien").map(println)
     } yield ExitCode.Success).handleErrorWith(err => logger.info(err)("Something went wrong"))
   } yield ExitCode.Success

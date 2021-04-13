@@ -15,4 +15,4 @@ case class ActorMovie(character: String,
                       backdropPath: String,
                       overview: String,
                       posterPath: String,
-                )
+                     )
