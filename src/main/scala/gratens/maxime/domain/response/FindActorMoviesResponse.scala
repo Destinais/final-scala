@@ -1,5 +1,5 @@
 package gratens.maxime.domain.response
 
-import gratens.maxime.domain.model.Movie
+import gratens.maxime.domain.model.ActorMovie
 
-case class FindActorMoviesResponse (cast: List[Movie])
+case class FindActorMoviesResponse (cast: List[ActorMovie])
