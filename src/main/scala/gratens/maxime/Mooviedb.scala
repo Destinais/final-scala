@@ -12,7 +12,8 @@ object Mooviedb extends IOApp {
     _ <- logger.info("Start querying api")
     api = new MooviedbApi(config)
     _ <- (for {
-      _ <- api.findActorId("Jason", "Statham").map(println)
+      actorId <- api.findActorId("Jason", "Statham")
+      _ <- api.findActorMovies(actorId).map(println)
       _ <- api.findActorId("Chien", "Chien").map(println)
     } yield ExitCode.Success).handleErrorWith(err => logger.info(err)("Something went wrong"))
   } yield ExitCode.Success
