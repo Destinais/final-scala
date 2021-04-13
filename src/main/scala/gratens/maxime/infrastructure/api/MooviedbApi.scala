@@ -38,5 +38,5 @@ class MooviedbApi(apiConfig: ApiConfig) extends Api[IO] {
     director <- IO.fromOption(movieResponse.crew.find(_.job == "Director"))(new Throwable("Can't find any actor with this name"))
   } yield (director.id, director.name)
 
-  override def request(actor1: FullName, actor2: FullName): IO[Set[(String, String)]] = ???
+  override def request(actor1: FullName, actor2: FullName): IO[Set[(String, String)]] = ??? // TODO : We don't understand the goal of this request
 }
